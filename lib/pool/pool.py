@@ -1,17 +1,20 @@
 from abc import ABC, abstractmethod
 from lib.pool.water_color import WaterColor
+from lib.pool.depth_type import DepthType
 
 class Pool(ABC):
 
-    def __init__(self, **kwargs: dict) -> None:
+    def __init__(self, **kwargs: dict[str, any]) -> None:
         self.gallon_capacity = kwargs.get('gallon_capacity', None)
         self.depth_swallow_end = kwargs.get('depth_swallow_end', None)
         self.depth_deep_end = kwargs.get('depth_deep_end', None)
         self.water_color = kwargs.get('water_color', None)
+        self.depth_type = kwargs.get('depth_type', None)
 
     @classmethod
-    def generate(cls, **kwargs: dict):
-        return cls(**kwargs)
+    @abstractmethod
+    def generate(cls, **kwargs: dict[str, any]):
+        pass
     
     @abstractmethod
     def get_volume():
@@ -50,6 +53,17 @@ class Pool(ABC):
         if water_color and not type(water_color) is WaterColor:
             raise ValueError
         self._water_color = water_color
+
+
+    @property
+    def depth_type(self) -> DepthType:
+        return self._depth_type
+    
+    @depth_type.setter
+    def depth_type(self, depth_type: DepthType) -> None:
+        if depth_type and not type(depth_type) is DepthType:
+            raise ValueError
+        self._depth_type = depth_type
 
     def get_required_chlorine_dose(self):
         if not self.water_color:

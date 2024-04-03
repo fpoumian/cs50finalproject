@@ -1,11 +1,37 @@
 from lib.pool.pool import Pool
+from lib.pool.depth_type import DepthType
 
 class RectangularPool(Pool):
 
-    def __init__(self, **kwargs: float) -> None:
+    def __init__(self, **kwargs: dict[str, any]) -> None:
         super().__init__(**kwargs)
         self.length = kwargs.get('length', None)
         self.width = kwargs.get('width', None)
+
+    @classmethod
+    def generate(cls, **kwargs: dict[str, any]):
+
+        depth_type = kwargs.get('depth_type', None)
+        gallon_capacity = kwargs.get('gallon_capacity', None)
+        depth_swallow_end = kwargs.get('depth_swallow_end', None)
+        depth_deep_end = kwargs.get('depth_deep_end', None)
+
+        if gallon_capacity:
+            return cls(**kwargs)
+        
+        if not depth_type:
+            raise ValueError
+        
+        if depth_type == DepthType.CONSTANT_DEPTH:
+            if not depth_swallow_end:
+                raise ValueError
+
+        if depth_type == DepthType.VARIABLE_DEPTH:
+            if not depth_swallow_end or not depth_deep_end:
+                raise ValueError
+
+    
+        return cls(**kwargs)
 
     @property
     def length(self) -> float:
@@ -34,9 +60,9 @@ class RectangularPool(Pool):
         if self.gallon_capacity:
             return self.gallon_capacity
         elif self.length and self.width:
-            if self.depth_swallow_end and self.depth_deep_end:
+            if self.depth_type == DepthType.VARIABLE_DEPTH:
                 return self.calculate_variable_depth_volumen()
-            elif self.depth_swallow_end and not self.depth_deep_end:
+            elif self.depth_type == DepthType.CONSTANT_DEPTH:
                 return self.calculate_constant_depth_volumen()
             else:
                 raise RuntimeError('Cannot calculate pool volume with current data')    
