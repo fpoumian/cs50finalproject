@@ -15,7 +15,7 @@ def main():
 
 def map_answers_to_pool_init_args(answers) -> dict:
     init_args = {
-        "gallon_capacity": float(answers.get('pool_capacity')),
+        "gallon_volume": float(answers.get('pool_volume')),
         "water_color":  WaterColor[answers.get('pool_water_color')],
     }
 

@@ -5,7 +5,7 @@ from lib.pool.depth_type import DepthType
 class Pool(ABC):
 
     def __init__(self, **kwargs) -> None:
-        self.gallon_capacity = kwargs.get('gallon_capacity', None)
+        self.gallon_volume = kwargs.get('gallon_volume', None)
         self.depth_swallow_end = kwargs.get('depth_swallow_end', None)
         self.depth_deep_end = kwargs.get('depth_deep_end', None)
         self.water_color = kwargs.get('water_color', None)
@@ -21,12 +21,12 @@ class Pool(ABC):
         pass
     
     @property
-    def gallon_capacity(self) -> float:
-        return self._gallon_capacity
+    def gallon_volume(self) -> float:
+        return self._gallon_volume
     
-    @gallon_capacity.setter
-    def gallon_capacity(self, gallon_capacity: float) -> None:
-        self._gallon_capacity = gallon_capacity
+    @gallon_volume.setter
+    def gallon_volume(self, gallon_volume: float) -> None:
+        self._gallon_volume = gallon_volume
 
     @property
     def depth_swallow_end(self) -> float:

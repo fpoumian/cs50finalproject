@@ -12,11 +12,11 @@ class RectangularPool(Pool):
     def generate(cls, **kwargs: dict):
 
         depth_type = kwargs.get('depth_type', None)
-        gallon_capacity = kwargs.get('gallon_capacity', None)
+        gallon_volume = kwargs.get('gallon_volume', None)
         depth_swallow_end = kwargs.get('depth_swallow_end', None)
         depth_deep_end = kwargs.get('depth_deep_end', None)
 
-        if gallon_capacity:
+        if gallon_volume:
             return cls(**kwargs)
         
         if not depth_type:
@@ -57,8 +57,8 @@ class RectangularPool(Pool):
         return self.length * self.width * depth_average * 7.5
 
     def get_volume(self) -> float:
-        if self.gallon_capacity:
-            return self.gallon_capacity
+        if self.gallon_volume:
+            return self.gallon_volume
         elif self.length and self.width:
             if self.depth_type == DepthType.VARIABLE_DEPTH:
                 return self.calculate_variable_depth_volumen()
