@@ -4,7 +4,7 @@ from lib.pool.depth_type import DepthType
 
 class Pool(ABC):
 
-    def __init__(self, **kwargs: dict[str, any]) -> None:
+    def __init__(self, **kwargs) -> None:
         self.gallon_capacity = kwargs.get('gallon_capacity', None)
         self.depth_swallow_end = kwargs.get('depth_swallow_end', None)
         self.depth_deep_end = kwargs.get('depth_deep_end', None)
@@ -13,11 +13,11 @@ class Pool(ABC):
 
     @classmethod
     @abstractmethod
-    def generate(cls, **kwargs: dict[str, any]):
+    def generate(cls, **kwargs: dict):
         pass
     
     @abstractmethod
-    def get_volume():
+    def get_volume(self):
         pass
     
     @property

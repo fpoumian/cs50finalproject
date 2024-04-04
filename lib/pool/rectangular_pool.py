@@ -3,13 +3,13 @@ from lib.pool.depth_type import DepthType
 
 class RectangularPool(Pool):
 
-    def __init__(self, **kwargs: dict[str, any]) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.length = kwargs.get('length', None)
         self.width = kwargs.get('width', None)
 
     @classmethod
-    def generate(cls, **kwargs: dict[str, any]):
+    def generate(cls, **kwargs: dict):
 
         depth_type = kwargs.get('depth_type', None)
         gallon_capacity = kwargs.get('gallon_capacity', None)
