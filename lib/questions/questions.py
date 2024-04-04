@@ -1,5 +1,7 @@
 
 from lib.pool.water_color import WaterColor
+from lib.pool.depth_type import DepthType
+
 
 import inquirer
 
@@ -10,10 +12,10 @@ def is_pool_volume_unknown(ans):
     return ans['pool_known_information'] == 'unknown_pool_volume'
 
 def should_ignore_variable_pool_question(ans):
-    return is_pool_volume_known(ans) or ans['pool_depth_type'] == 'pool_depth_type_is_constant'
+    return is_pool_volume_known(ans) or ans['pool_depth_type'] == DepthType.CONSTANT_DEPTH.value
 
 def should_ignore_constant_pool_question(ans):
-    return is_pool_volume_known(ans) or ans['pool_depth_type'] == 'pool_depth_type_is_variable'
+    return is_pool_volume_known(ans) or ans['pool_depth_type'] == DepthType.VARIABLE_DEPTH.value
 
 def get_questions():
     questions = [
@@ -28,8 +30,8 @@ def get_questions():
         inquirer.Text("pool_length", message="Enter the length of your pool in feet", ignore=is_pool_volume_known),
         inquirer.List("pool_depth_type", message="Which of these options best describes the depth of your pool?", ignore=is_pool_volume_known,
                 choices=[
-            ("My pool has one constant depth", "pool_depth_type_is_constant"),
-            ("My pool has a variable depth (i.e. one swallow depth and one deep depth)", "pool_depth_type_is_variable")
+            ("My pool has one constant depth", DepthType.CONSTANT_DEPTH.value),
+            ("My pool has a variable depth (i.e. one swallow depth and one deep depth)", DepthType.VARIABLE_DEPTH.value)
                     ]
         ),
         inquirer.Text("pool_constant_depth", message="Enter the depth of your pool", ignore=should_ignore_constant_pool_question),

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from lib.pool.water_color import WaterColor
 from lib.pool.depth_type import DepthType
 
+
 class Pool(ABC):
 
     def __init__(self, **kwargs) -> None:
@@ -13,7 +14,7 @@ class Pool(ABC):
 
     @classmethod
     @abstractmethod
-    def generate(cls, **kwargs: dict):
+    def generate(cls, **kwargs):
         pass
     
     @abstractmethod
