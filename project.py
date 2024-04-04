@@ -1,11 +1,12 @@
 from lib.pool.rectangular_pool import RectangularPool
+from lib.pool.round_pool import RoundPool
 from lib.pool.pool import Pool
 from lib.pool.water_color import WaterColor
 from lib.pool.depth_type import DepthType
+from lib.pool.shape import Shape
 from lib.questions.questions import get_questions
 import inquirer
 from pprint import pprint
-import typing
 from typing_extensions import TypedDict
 
 PoolInitArgs = TypedDict('PoolInitArgs', {
@@ -18,14 +19,29 @@ PoolInitArgs = TypedDict('PoolInitArgs', {
     'length': float,
 }, total=False)
 
+PromptAnswers = TypedDict('PromptAnswers', {
+    'pool_shape': str,
+    'pool_volume': str,
+    'pool_depth_type': str,
+    'pool_constant_depth': str,
+    'pool_water_color': str,
+    'pool_variable_depth_swallow': str,
+    'pool_variable_depth_deep': str,
+    'pool_width': str,
+    'pool_length': str,
+})
+
 
 def main():
     questions = get_questions()
     answers = inquirer.prompt(questions)
+    pool = generate_pool_with_answers(answers)
+    instructions = generate_pool_cleaning_instructions_message(pool)
+    print(instructions)
 
-    pprint(answers)
 
-def map_answers_to_pool_init_args(answers) -> PoolInitArgs:
+def map_answers_to_pool_init_args(answers: PromptAnswers) -> PoolInitArgs:
+    pool_water_color = answers.get('pool_water_color')
     gallon_volume = answers.get('pool_volume', None)
     depth_type = answers.get('pool_depth_type', None)
     pool_constant_depth = answers.get('pool_constant_depth', None)
@@ -34,9 +50,10 @@ def map_answers_to_pool_init_args(answers) -> PoolInitArgs:
     length = answers.get('pool_length', None)
     width = answers.get('pool_width', None)
 
-    init_args: PoolInitArgs = {
-        "water_color":  WaterColor[answers.get('pool_water_color')],
-    }
+    init_args: PoolInitArgs = {}
+
+    if pool_water_color:
+        init_args['water_color'] = WaterColor[pool_water_color]
 
     if gallon_volume:
         init_args['gallon_volume'] = float(gallon_volume)
@@ -63,8 +80,24 @@ def map_answers_to_pool_init_args(answers) -> PoolInitArgs:
     return init_args
 
 
-def make_pool(**kwargs):
-    pass
+def generate_pool_with_answers(answers: PromptAnswers) -> Pool:
+
+    if not 'pool_shape' in answers:
+        raise ValueError
+
+    pool_shape: Shape = Shape[answers['pool_shape']]
+    init_args: PoolInitArgs = map_answers_to_pool_init_args(answers)
+
+    if pool_shape == Shape.RECTANGULAR:
+        return RectangularPool.generate(**init_args) 
+    elif pool_shape == Shape.ROUND:
+        return RoundPool.generate(**init_args)
+    else:
+        raise RuntimeError('Cannot generate pool with current data')
+    
+def generate_pool_cleaning_instructions_message(pool: Pool) -> str:
+    required_chlorine_dose = pool.get_required_chlorine_dose()
+    return f'You need {required_chlorine_dose} pounds of shock to clean your pool. \nThe most common types of shock are calcium hypochlorite (cal hypo), sodium dichlor (dichlor shock), and non-chlorine shock.'
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
 from lib.pool.pool import Pool
 from lib.pool.depth_type import DepthType
+import math
 
-class RectangularPool(Pool):
+class RoundPool(Pool):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.length = kwargs.get('length', None)
-        self.width = kwargs.get('width', None)
+        self.diameter = kwargs.get('diameter', None)
 
     @classmethod
     def generate(cls, **kwargs):
@@ -15,6 +15,7 @@ class RectangularPool(Pool):
         gallon_volume = kwargs.get('gallon_volume', None)
         depth_swallow_end = kwargs.get('depth_swallow_end', None)
         depth_deep_end = kwargs.get('depth_deep_end', None)
+        diameter = kwargs.get('diameter', None)
 
         if gallon_volume:
             return cls(**kwargs)
@@ -29,37 +30,33 @@ class RectangularPool(Pool):
         if depth_type == DepthType.VARIABLE_DEPTH:
             if not depth_swallow_end or not depth_deep_end:
                 raise ValueError
+            
+        if not diameter:
+            raise ValueError('required parameter (diameter) is missing when trying to instantiate RoundPool object')
 
     
         return cls(**kwargs)
 
     @property
-    def length(self) -> float:
-        return self._length
+    def diameter(self) -> float:
+        return self._diameter
     
-    @length.setter
-    def length(self, length: float) -> None:
-        self._length = length
+    @diameter.setter
+    def diameter(self, diameter: float) -> None:
+        self._diameter = diameter
 
-    @property
-    def width(self) -> float:
-        return self._width
-    
-    @width.setter
-    def width(self, width: float) -> None:
-        self._width = width
 
     def calculate_constant_depth_volumen(self) -> float:
-        return self.length * self.width * self.depth_swallow_end * 7.5
+        return (math.pi * ((self.diameter / 2)**2) * self.depth_swallow_end * 7.5)
     
     def calculate_variable_depth_volumen(self) -> float:
         depth_average = (self.depth_deep_end + self.depth_swallow_end) / 2
-        return self.length * self.width * depth_average * 7.5
+        return (math.pi * ((self.diameter / 2)**2) * depth_average * 7.5)
 
     def get_volume(self) -> float:
         if self.gallon_volume:
             return self.gallon_volume
-        elif self.length and self.width:
+        elif self.diameter:
             if self.depth_type == DepthType.VARIABLE_DEPTH:
                 return self.calculate_variable_depth_volumen()
             elif self.depth_type == DepthType.CONSTANT_DEPTH:

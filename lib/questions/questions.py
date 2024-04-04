@@ -1,6 +1,7 @@
 
 from lib.pool.water_color import WaterColor
 from lib.pool.depth_type import DepthType
+from lib.pool.shape import Shape
 
 
 import inquirer
@@ -19,9 +20,15 @@ def should_ignore_constant_pool_question(ans):
 
 def get_questions():
     questions = [
+         inquirer.List("pool_shape", message="Which of these options best describes the shape of your pool?",
+                choices=[
+            ("My pool has a rectangular or squared shape", Shape.RECTANGULAR.value),
+            ("My pool has a round shape", Shape.ROUND.value),
+                    ]
+        ),
          inquirer.List("pool_known_information", message="Which of these options best describes what you knwow about your pool?",
                 choices=[
-            ("I know the volume of my pool in Gallons", "known_gallon_volume"),
+            ("I know the volume of my pool in gallons", "known_gallon_volume"),
             ("I do not know the volume of my pool, but I know the widht, length and depth of my pool", "unknown_pool_volume")
                     ]
         ),
