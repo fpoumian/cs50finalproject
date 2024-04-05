@@ -149,4 +149,24 @@ def test_generate_pool_cleaning_instructions():
 
    instructions = generate_pool_cleaning_instructions_message(pool)
 
-   assert 'You need 1.5 pounds of shock to clean your pool' in instructions
+   assert 'You need 1.50 pounds' in instructions
+
+
+def test_generate_pool_cleaning_instructions_for_variable_depth_rect_pool():
+   answers = {
+    'pool_shape': Shape.RECTANGULAR.value,
+    'pool_constant_depth': None,
+    'pool_depth_type': DepthType.VARIABLE_DEPTH.value,
+    'pool_known_information': 'unknown_gallon_volume',
+    'pool_length': '12.8',
+    'pool_variable_depth_deep': '4.5',
+    'pool_variable_depth_swallow': '3.3',
+    'pool_water_color': WaterColor.TEAL_GREEN.value,
+    'pool_width': '14.8'
+   }
+     
+   pool = generate_pool_with_answers(answers)
+
+   instructions = generate_pool_cleaning_instructions_message(pool)
+
+   assert 'You need 1.11 pounds' in instructions

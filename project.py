@@ -29,7 +29,7 @@ PromptAnswers = TypedDict('PromptAnswers', {
     'pool_variable_depth_deep': str,
     'pool_width': str,
     'pool_length': str,
-})
+}, total=False)
 
 
 def main():
@@ -97,7 +97,7 @@ def generate_pool_with_answers(answers: PromptAnswers) -> Pool:
     
 def generate_pool_cleaning_instructions_message(pool: Pool) -> str:
     required_chlorine_dose = pool.get_required_chlorine_dose()
-    return f'You need {required_chlorine_dose} pounds of shock to clean your pool. \nThe most common types of shock are calcium hypochlorite (cal hypo), sodium dichlor (dichlor shock), and non-chlorine shock.'
+    return f'You need {required_chlorine_dose:.2f} pounds (lbs) of shock to clean your pool. \nThe most common types of shock are calcium hypochlorite (cal hypo), sodium dichlor (dichlor shock), and non-chlorine shock.'
 
 if __name__ == "__main__":
     main()
