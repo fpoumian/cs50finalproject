@@ -1,14 +1,9 @@
-from lib.pool.rectangular_pool import RectangularPool
-from lib.pool.round_pool import RoundPool
-from lib.pool.pool import Pool
-from lib.pool.water_color import WaterColor, get_water_color_label
-from lib.pool.depth_type import DepthType
-from lib.pool.shape import Shape
-from lib.questions.questions import get_questions
+from lib.pool import Pool, RectangularPool, RoundPool, WaterColor, DepthType, Shape
+from lib.pool.water_color import get_water_color_label
+from lib.questions import get_questions
 import inquirer
 from colored import Style, Fore, Back
 from tabulate import tabulate
-from pprint import pprint
 from typing_extensions import TypedDict
 import sys
 
@@ -128,6 +123,7 @@ def generate_pool_cleaning_instructions_message(pool: Pool) -> str:
     required_chlorine_dose = pool.get_required_shock_dose()
     bold_white_text_style: str = f'{Style.BOLD}{Fore.WHITE}{Back.BLACK}'
     return f'You need {bold_white_text_style}{required_chlorine_dose:.1f} pounds (lbs) {Style.reset} of shock to clean your swimming pool. \nThe most common types of shock are calcium hypochlorite (cal hypo), sodium dichlor (dichlor shock), and non-chlorine shock.'
+
 
 if __name__ == "__main__":
     main()
