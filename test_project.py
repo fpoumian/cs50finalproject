@@ -1,4 +1,4 @@
-from project import map_answers_to_pool_init_args, generate_pool_with_answers, generate_pool_cleaning_instructions_message
+from project import map_answers_to_pool_init_args, generate_pool_with_answers, generate_pool_cleaning_instructions_message, map_pool_data_to_table_data
 from lib.pool.water_color import WaterColor
 from lib.pool.depth_type import DepthType
 from lib.pool.shape import Shape
@@ -170,3 +170,30 @@ def test_generate_pool_cleaning_instructions_for_variable_depth_rect_pool():
    instructions = generate_pool_cleaning_instructions_message(pool)
 
    assert 'You need 1.11 pounds' in instructions
+
+
+
+
+def test_map_pool_data_to_table_data():
+   answers = {
+    'pool_shape': Shape.ROUND.value,
+    'pool_volume': '5000',
+    'pool_constant_depth': None,
+    'pool_depth_type': None,
+    'pool_known_information': 'known_gallon_volume',
+    'pool_length': None,
+    'pool_variable_depth_deep': None,
+    'pool_variable_depth_swallow': None,
+    'pool_water_color': WaterColor.DARK_GREEN.value,
+    'pool_width': None
+   }
+     
+   pool = generate_pool_with_answers(answers)
+
+   table_data = map_pool_data_to_table_data(pool)
+
+   assert len(table_data) == 4
+   assert table_data[0][1] == 5000
+   assert table_data[1][1] == 'Dark Green'
+   assert table_data[2][1] == 1.5
+   assert table_data[3][1] == 680.39

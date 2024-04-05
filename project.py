@@ -1,13 +1,15 @@
 from lib.pool.rectangular_pool import RectangularPool
 from lib.pool.round_pool import RoundPool
 from lib.pool.pool import Pool
-from lib.pool.water_color import WaterColor
+from lib.pool.water_color import WaterColor, get_water_color_label
 from lib.pool.depth_type import DepthType
 from lib.pool.shape import Shape
 from lib.questions.questions import get_questions
 import inquirer
+from tabulate import tabulate
 from pprint import pprint
 from typing_extensions import TypedDict
+import sys
 
 PoolInitArgs = TypedDict('PoolInitArgs', {
     'gallon_volume': float,
@@ -33,11 +35,17 @@ PromptAnswers = TypedDict('PromptAnswers', {
 
 
 def main():
-    questions = get_questions()
-    answers = inquirer.prompt(questions)
-    pool = generate_pool_with_answers(answers)
-    instructions = generate_pool_cleaning_instructions_message(pool)
+    try:
+        questions = get_questions()
+        answers = inquirer.prompt(questions)
+        pool = generate_pool_with_answers(answers)
+        instructions = generate_pool_cleaning_instructions_message(pool)
+        table = map_pool_data_to_table_data(pool)
+    except (ValueError, RuntimeError) as e:
+        sys.exit(e)
+
     print(instructions)
+    print(tabulate(table))
 
 
 def map_answers_to_pool_init_args(answers: PromptAnswers) -> PoolInitArgs:
@@ -94,6 +102,14 @@ def generate_pool_with_answers(answers: PromptAnswers) -> Pool:
         return RoundPool.generate(**init_args)
     else:
         raise RuntimeError('Cannot generate pool with current data')
+    
+def map_pool_data_to_table_data(pool: Pool) -> list:
+    return [
+        ['Pool Volume (gallons)', pool.get_volume()],
+        ['Water Color', get_water_color_label(pool.water_color)],
+        ['Required dose of Shock (lbs)', pool.get_required_chlorine_dose()],
+        ['Required dose of Shock (g)', round(pool.get_required_chlorine_dose() * 453.592, 2)]
+    ]
     
 def generate_pool_cleaning_instructions_message(pool: Pool) -> str:
     required_chlorine_dose = pool.get_required_chlorine_dose()
