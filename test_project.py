@@ -7,7 +7,7 @@ from lib.pool.rectangular_pool import RectangularPool
 from lib.pool.round_pool import RoundPool
 import pytest
 
-def test_map_answers_to_pool_init_args_with_known_gallon_volume():
+def test_map_answers_to_pool_init_args():
     answer = {
     'pool_volume': '5000',
     'pool_constant_depth': None,
@@ -73,7 +73,7 @@ def test_map_answers_to_pool_init_args_with_unknown_gallon_volume_and_variable_d
     assert init_args['width'] == 3.5
     assert init_args['length'] == 4.5
 
-def test_generate_pool_with_answers_for_rectangular_pool():
+def test_generate_pool_with_answers():
    answers = {
     'pool_shape': Shape.RECTANGULAR.value,
     'pool_volume': '5000',
@@ -149,7 +149,7 @@ def test_generate_pool_with_answers_with_known_gallon_volume():
       assert type(pool) is RectangularPool
 
 
-def test_generate_pool_cleaning_instructions():
+def test_generate_pool_cleaning_instructions_message():
    answers = {
     'pool_shape': Shape.ROUND.value,
     'pool_volume': '5000',
