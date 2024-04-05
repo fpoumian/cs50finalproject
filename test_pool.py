@@ -130,15 +130,15 @@ def test_rectangular_pool_get_required_chlorine_shock():
 
     rect_pool = RectangularPool(**init_args)
 
-    assert rect_pool.get_required_chlorine_dose() == 1.0
+    assert rect_pool.get_required_shock_dose() == 1.0
 
     rect_pool.water_color = WaterColor.DARK_GREEN
 
-    assert rect_pool.get_required_chlorine_dose() == 1.5
+    assert rect_pool.get_required_shock_dose() == 1.5
 
     rect_pool.water_color = WaterColor.BLACK_GREEN
 
-    assert rect_pool.get_required_chlorine_dose() == 2.0
+    assert rect_pool.get_required_shock_dose() == 2.0
 
 
 def test_rectangular_pool_generate():
@@ -282,7 +282,7 @@ def test_round_pool_get_volume_with_variable_depth():
 
     assert round_pool.get_volume() == pytest.approx(4453.0, rel=1e-3)
 
-def test_round_pool_get_required_chlorine_dose_with_constant_depth_dark_green_water():
+def test_round_pool_get_required_shock_dose_with_constant_depth_dark_green_water():
 
     init_args = {
         "diameter": 12.0,
@@ -293,9 +293,22 @@ def test_round_pool_get_required_chlorine_dose_with_constant_depth_dark_green_wa
 
     round_pool = RoundPool(**init_args)
 
-    assert round_pool.get_required_chlorine_dose() == pytest.approx(1.1451, rel=1e-3)
+    assert round_pool.get_required_shock_dose() == pytest.approx(1.1451, rel=1e-3)
 
-def test_round_pool_get_required_chlorine_dose_with_constant_depth_teal_green_water():
+def test_round_pool_get_required_shock_dose__in_grams_with_constant_depth_dark_green_water():
+
+    init_args = {
+        "diameter": 12.0,
+        "depth_swallow_end": 4.5,
+        "depth_type": DepthType.CONSTANT_DEPTH,
+        "water_color": WaterColor.DARK_GREEN
+    }
+
+    round_pool = RoundPool(**init_args)
+
+    assert round_pool.get_required_shock_dose(unit='g') == pytest.approx(519.4, rel=1e-3)
+
+def test_round_pool_get_required_shock_dose_with_constant_depth_teal_green_water():
 
     init_args = {
         "diameter": 12.0,
@@ -306,9 +319,9 @@ def test_round_pool_get_required_chlorine_dose_with_constant_depth_teal_green_wa
 
     round_pool = RoundPool(**init_args)
 
-    assert round_pool.get_required_chlorine_dose() == pytest.approx(0.7634, rel=1e-3)
+    assert round_pool.get_required_shock_dose() == pytest.approx(0.7634, rel=1e-3)
 
-def test_round_pool_get_required_chlorine_dose_with_variable_depth():
+def test_round_pool_get_required_shock_dose_with_variable_depth():
 
     init_args = {
         "diameter": 12.0,
@@ -320,7 +333,7 @@ def test_round_pool_get_required_chlorine_dose_with_variable_depth():
 
     round_pool = RoundPool(**init_args)
 
-    assert round_pool.get_required_chlorine_dose() == pytest.approx(1.78, rel=1e-3)
+    assert round_pool.get_required_shock_dose() == pytest.approx(1.78, rel=1e-3)
 
 def test_round_pool_generate():
 

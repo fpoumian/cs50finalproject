@@ -9,7 +9,7 @@ class WaterColor(Enum):
 
 def get_water_color_label(water_color: WaterColor) -> str:
     label_dict = {
-        WaterColor.LIGHT_BLUE: 'Light Blue',
+        WaterColor.LIGHT_BLUE: 'Light Blue (Maintenance)',
         WaterColor.TEAL_GREEN: 'Teal Green',
         WaterColor.DARK_GREEN: 'Dark Green',
         WaterColor.BLACK_GREEN: 'Black Green',

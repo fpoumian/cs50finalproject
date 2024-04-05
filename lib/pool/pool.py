@@ -66,11 +66,12 @@ class Pool(ABC):
             raise ValueError
         self._depth_type = depth_type
 
-    def get_required_chlorine_dose(self):
+    def get_required_shock_dose(self, unit='lbs') -> float:
         if not self.water_color:
             raise RuntimeError
         volume = self.get_volume()
         multiplier = None
+        gallons_per_pound = 10000.0
 
         match self.water_color:
             case WaterColor.LIGHT_BLUE:
@@ -84,5 +85,8 @@ class Pool(ABC):
             case _:
                 raise RuntimeError
 
-        return (volume / 10000.0) * multiplier
+        if(unit == 'g'):
+            return (((volume / gallons_per_pound) * multiplier) * 453.6)
+        else:
+            return (volume / gallons_per_pound) * multiplier
 

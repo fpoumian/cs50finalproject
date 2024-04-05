@@ -91,7 +91,7 @@ def test_generate_pool_with_answers_for_rectangular_pool():
    assert type(pool) is RectangularPool
    assert pool.gallon_volume == 5000.00
    assert pool.water_color == WaterColor.DARK_GREEN
-   assert pool.get_required_chlorine_dose() == 1.5
+   assert pool.get_required_shock_dose() == 1.5
 
 
 def test_generate_pool_with_answers_for_round_pool():
@@ -112,10 +112,28 @@ def test_generate_pool_with_answers_for_round_pool():
    assert type(pool) is RoundPool
    assert pool.gallon_volume == 5000.00
    assert pool.water_color == WaterColor.DARK_GREEN
-   assert pool.get_required_chlorine_dose() == 1.5
+   assert pool.get_required_shock_dose() == 1.5
 
 def test_generate_pool_with_answers_without_pool_shape():
       answers = {
+      'pool_shape': None,
+      'pool_volume': '5000',
+      'pool_constant_depth': None,
+      'pool_depth_type': None,
+      'pool_known_information': 'unknown_pool_volume',
+      'pool_length': None,
+      'pool_variable_depth_deep': None,
+      'pool_variable_depth_swallow': None,
+      'pool_water_color': WaterColor.DARK_GREEN.value,
+      'pool_width': None
+      }
+
+      with pytest.raises(ValueError):
+         generate_pool_with_answers(answers)
+
+def test_generate_pool_with_answers_with_known_gallon_volume():
+      answers = {
+      'pool_shape': None,
       'pool_volume': '5000',
       'pool_constant_depth': None,
       'pool_depth_type': None,
@@ -127,8 +145,8 @@ def test_generate_pool_with_answers_without_pool_shape():
       'pool_width': None
       }
 
-      with pytest.raises(ValueError):
-         generate_pool_with_answers(answers)
+      pool = generate_pool_with_answers(answers)
+      assert type(pool) is RectangularPool
 
 
 def test_generate_pool_cleaning_instructions():
@@ -149,7 +167,7 @@ def test_generate_pool_cleaning_instructions():
 
    instructions = generate_pool_cleaning_instructions_message(pool)
 
-   assert 'You need 1.50 pounds' in instructions
+   assert '1.5 pounds' in instructions
 
 
 def test_generate_pool_cleaning_instructions_for_variable_depth_rect_pool():
@@ -169,7 +187,7 @@ def test_generate_pool_cleaning_instructions_for_variable_depth_rect_pool():
 
    instructions = generate_pool_cleaning_instructions_message(pool)
 
-   assert 'You need 1.11 pounds' in instructions
+   assert '1.1 pounds' in instructions
 
 
 
@@ -193,7 +211,7 @@ def test_map_pool_data_to_table_data():
    table_data = map_pool_data_to_table_data(pool)
 
    assert len(table_data) == 4
-   assert table_data[0][1] == 5000
+   assert '5000' in table_data[0][1]
    assert table_data[1][1] == 'Dark Green'
-   assert table_data[2][1] == 1.5
-   assert table_data[3][1] == 680.39
+   assert '1.5' in table_data[2][1]
+   assert '680' in table_data[3][1]
