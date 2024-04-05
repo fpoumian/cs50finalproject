@@ -52,7 +52,7 @@ def get_questions() -> list:
             choices=[
                 ("I know the volume of my pool in gallons", "known_gallon_volume"),
                 (
-                    "I do not know the volume of my pool, but I know other measurements of my pool (i.e. width, length or diameter)",
+                    "I do not know the volume of my pool, but I know other measurements of my pool (i.e. width, length, diameter or depth)",
                     "unknown_pool_volume",
                 ),
             ],
