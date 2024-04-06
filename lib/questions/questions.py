@@ -13,6 +13,12 @@ def is_pool_volume_unknown(ans):
     return ans["pool_known_information"] == "unknown_pool_volume"
 
 
+def should_ignore_rect_pool_question(ans):
+    return ans["pool_shape"] != Shape.RECTANGULAR.value
+
+def should_ignore_round_pool_question(ans):
+    return ans["pool_shape"] != Shape.ROUND.value
+
 def should_ignore_variable_pool_question(ans):
     return (
         is_pool_volume_known(ans)
@@ -77,13 +83,19 @@ def get_questions() -> list:
             "pool_width",
             validate=validate_numeric_answer,
             message="Enter the width of your swimming pool (in feet)",
-            ignore=is_pool_volume_known,
+            ignore=should_ignore_rect_pool_question,
         ),
         inquirer.Text(
             "pool_length",
             validate=validate_numeric_answer,
             message="Enter the length of your swimming pool (in feet)",
-            ignore=is_pool_volume_known,
+            ignore=should_ignore_rect_pool_question,
+        ),
+        inquirer.Text(
+            "pool_diameter",
+            validate=validate_numeric_answer,
+            message="Enter the diameter of your swimming pool (in feet)",
+            ignore=should_ignore_round_pool_question,
         ),
         inquirer.List(
             "pool_depth_type",

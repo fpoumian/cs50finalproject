@@ -15,6 +15,7 @@ PoolInitArgs = TypedDict('PoolInitArgs', {
     'depth_deep_end': float,
     'width': float,
     'length': float,
+    'diameter': float,
 }, total=False)
 
 PromptAnswers = TypedDict('PromptAnswers', {
@@ -27,6 +28,7 @@ PromptAnswers = TypedDict('PromptAnswers', {
     'pool_variable_depth_deep': str,
     'pool_width': str,
     'pool_length': str,
+    'pool_diameter': str,
     'pool_known_information': str,
 }, total=False)
 
@@ -44,6 +46,8 @@ def main():
 
     except (ValueError, RuntimeError) as e:
         sys.exit(e)
+    except AttributeError:
+        sys.exit('You have exited the program.')
 
 def map_answers_to_pool_init_args(answers: PromptAnswers) -> PoolInitArgs:
     pool_water_color = answers.get('pool_water_color')
@@ -54,6 +58,7 @@ def map_answers_to_pool_init_args(answers: PromptAnswers) -> PoolInitArgs:
     pool_variable_depth_deep = answers.get('pool_variable_depth_deep', None)
     length = answers.get('pool_length', None)
     width = answers.get('pool_width', None)
+    diameter = answers.get('pool_diameter', None)
 
     init_args: PoolInitArgs = {}
 
@@ -80,6 +85,9 @@ def map_answers_to_pool_init_args(answers: PromptAnswers) -> PoolInitArgs:
 
     if width:
         init_args['width'] = float(width)
+        
+    if diameter:
+        init_args['diameter'] = float(diameter)
 
 
     return init_args
